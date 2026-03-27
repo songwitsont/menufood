@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เมนูอาหาร — Fine Dining</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Serif+Thai:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111111;
+    --card: #161616;
+    --card2: #1c1c1c;
+    --red: #c0392b;
+    --red-bright: #e74c3c;
+    --red-glow: #ff2e1f;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f5e6d3;
+    --text: #e8ddd0;
+    --muted: #888;
+    --border: rgba(192,57,43,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Noto Serif Thai', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:0;
+    opacity:.6;
+  }
+
+  /* ── Hero Header ── */
+  .hero {
+    position: relative;
+    padding: 60px 24px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(192,57,43,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: .8;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 8vw, 72px);
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+
+  .hero-title span {
+    color: var(--red-bright);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    letter-spacing: 2px;
+  }
+
+  .hero-line {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 28px auto 0;
+    max-width: 320px;
+  }
+  .hero-line::before, .hero-line::after {
+    content:'';
+    flex:1;
+    height:1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .hero-line-icon {
+    color: var(--gold);
+    font-size: 16px;
+  }
+
+  /* ── Category Filter ── */
+  .categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 20px 20px;
+    scrollbar-width: none;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .categories::-webkit-scrollbar { display:none; }
+
+  .cat-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .25s;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-btn::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background: linear-gradient(135deg, var(--red) 0%, transparent 100%);
+    opacity:0;
+    transition: opacity .25s;
+  }
+  .cat-btn:hover, .cat-btn.active {
+    color: #fff;
+    border-color: var(--red);
+    box-shadow: 0 0 20px rgba(192,57,43,0.35);
+  }
+  .cat-btn:hover::before, .cat-btn.active::before { opacity:1; }
+  .cat-btn span { position:relative; z-index:1; }
+
+  /* ── Section Title ── */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 20px 16px;
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .section-title-line {
+    flex:1;
+    height:1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ── Menu Grid ── */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    padding: 0 16px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── Menu Card ── */
+  .menu-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all .3s cubic-bezier(.25,.8,.25,1);
+    position: relative;
+    animation: fadeUp .5s ease both;
+  }
+  .menu-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(192,57,43,0.15);
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* Image area */
+  .card-img-wrap {
+    position: relative;
+    height: 200px;
+    background: var(--card2);
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .card-img-wrap img {
+    width:100%; height:100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+  }
+  .menu-card:hover .card-img-wrap img { transform: scale(1.06); }
+
+  .card-img-placeholder {
+    width:100%; height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    background: repeating-linear-gradient(
+      45deg,
+      #161616 0px,
+      #161616 10px,
+      #1a1a1a 10px,
+      #1a1a1a 20px
+    );
+    transition: background .3s;
+    cursor: pointer;
+  }
+  .card-img-placeholder:hover { background: #1e1212; }
+  .card-img-placeholder svg { opacity:.35; }
+  .card-img-placeholder p {
+    font-size:11px;
+    color: var(--muted);
+    letter-spacing:1px;
+  }
+
+  .card-img-overlay {
+    position:absolute;
+    inset:0;
+    background: linear-gradient(to top, rgba(10,10,10,.9) 0%, transparent 50%);
+  }
+
+  /* Badge */
+  .card-badge {
+    position:absolute;
+    top:12px; right:12px;
+    background: var(--red);
+    color:#fff;
+    font-size:10px;
+    padding:4px 10px;
+    border-radius:50px;
+    letter-spacing:1px;
+    font-weight:600;
+    box-shadow: 0 4px 12px rgba(192,57,43,0.5);
+  }
+
+  /* Upload overlay trigger */
+  .upload-trigger {
+    position:absolute;
+    top:12px; left:12px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    border:1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    font-size:10px;
+    padding:5px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    transition: all .2s;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    letter-spacing:.5px;
+  }
+  .upload-trigger:hover {
+    background: rgba(192,57,43,0.7);
+    border-color: var(--red);
+    color:#fff;
+  }
+  .upload-trigger input { display:none; }
+
+  /* Card body */
+  .card-body {
+    padding: 16px 18px 18px;
+  }
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .card-name-th {
+    font-size: 13px;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    font-weight:300;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .card-footer {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .card-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--red-bright);
+  }
+  .card-price span {
+    font-size:12px;
+    font-weight:400;
+    color:var(--muted);
+    font-family: 'Noto Serif Thai', serif;
+    margin-left:2px;
+  }
+  .card-add {
+    width:36px; height:36px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--red), #8b1a0f);
+    border:none;
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: all .2s;
+    box-shadow: 0 4px 14px rgba(192,57,43,0.4);
+  }
+  .card-add:hover {
+    transform:scale(1.12);
+    box-shadow: 0 6px 20px rgba(192,57,43,0.6);
+  }
+  .card-add:active { transform:scale(0.95); }
+
+  /* Spicy / veg tags */
+  .card-tags {
+    display:flex;
+    gap:6px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .tag {
+    font-size:10px;
+    padding:2px 8px;
+    border-radius:4px;
+    letter-spacing:.5px;
+  }
+  .tag-spicy { background:rgba(231,76,60,.15); color:#ff7675; border:1px solid rgba(231,76,60,.3); }
+  .tag-veg   { background:rgba(39,174,96,.1); color:#55efc4; border:1px solid rgba(39,174,96,.25); }
+  .tag-pop   { background:rgba(201,168,76,.1); color:var(--gold-light); border:1px solid rgba(201,168,76,.25); }
+  .tag-new   { background:rgba(108,92,231,.1); color:#a29bfe; border:1px solid rgba(108,92,231,.25); }
+
+  /* ── Add Item Button ── */
+  .add-item-wrap {
+    padding: 8px 16px 32px;
+    display:flex;
+    justify-content:center;
+  }
+  .add-item-btn {
+    background: transparent;
+    border: 1.5px dashed rgba(192,57,43,0.5);
+    color: var(--muted);
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 13px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition: all .25s;
+    width:100%;
+    max-width:400px;
+    justify-content:center;
+  }
+  .add-item-btn:hover {
+    border-color: var(--red);
+    color: var(--red-bright);
+    background: rgba(192,57,43,0.05);
+  }
+
+  /* ── Modal ── */
+  .modal-bg {
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    animation: fadeIn .2s ease;
+  }
+  .modal-bg.hidden { display:none; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    padding: 28px;
+    animation: slideUp .3s cubic-bezier(.25,.8,.25,1);
+    position:relative;
+  }
+  @keyframes slideUp {
+    from{opacity:0;transform:translateY(30px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color:#fff;
+    margin-bottom:20px;
+    padding-right:30px;
+  }
+
+  .modal-close {
+    position:absolute;
+    top:20px; right:20px;
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-size:22px;
+    cursor:pointer;
+    transition:color .2s;
+  }
+  .modal-close:hover { color:var(--red-bright); }
+
+  .form-group { margin-bottom:16px; }
+  .form-label {
+    display:block;
+    font-size:11px;
+    letter-spacing:1.5px;
+    color:var(--muted);
+    margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .form-input, .form-textarea, .form-select {
+    width:100%;
+    background: var(--deep);
+    border:1px solid rgba(255,255,255,0.08);
+    color:var(--text);
+    padding:10px 14px;
+    border-radius:10px;
+    font-family:'Noto Serif Thai', serif;
+    font-size:14px;
+    outline:none;
+    transition: border-color .2s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--red);
+  }
+  .form-textarea { resize:vertical; min-height:80px; }
+  .form-select option { background: var(--deep); }
+
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  .modal-img-upload {
+    border:2px dashed rgba(192,57,43,0.4);
+    border-radius:12px;
+    height:120px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    transition: all .25s;
+    background: rgba(192,57,43,0.03);
+    position:relative;
+    overflow:hidden;
+  }
+  .modal-img-upload:hover { border-color:var(--red); background:rgba(192,57,43,0.07); }
+  .modal-img-upload input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .modal-img-upload p { font-size:12px; color:var(--muted); }
+
+  .modal-preview {
+    width:100%; height:100%;
+    object-fit:cover;
+    position:absolute;
+    inset:0;
+    display:none;
+  }
+
+  .modal-tags-wrap { display:flex; gap:8px; flex-wrap:wrap; }
+  .tag-toggle {
+    padding:5px 12px;
+    border-radius:6px;
+    font-size:11px;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.1);
+    background:transparent;
+    color:var(--muted);
+    transition:all .2s;
+    font-family:'Noto Serif Thai',serif;
+  }
+  .tag-toggle.active-spicy { background:rgba(231,76,60,.2); color:#ff7675; border-color:rgba(231,76,60,.4); }
+  .tag-toggle.active-veg   { background:rgba(39,174,96,.15); color:#55efc4; border-color:rgba(39,174,96,.35); }
+  .tag-toggle.active-pop   { background:rgba(201,168,76,.15); color:var(--gold-light); border-color:rgba(201,168,76,.35); }
+  .tag-toggle.active-new   { background:rgba(108,92,231,.15); color:#a29bfe; border-color:rgba(108,92,231,.35); }
+
+  .modal-save {
+    width:100%;
+    background: linear-gradient(135deg, var(--red) 0%, #8b1a0f 100%);
+    border:none;
+    color:#fff;
+    padding:14px;
+    border-radius:12px;
+    font-family:'Playfair Display',serif;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:20px;
+    transition:all .2s;
+    box-shadow: 0 8px 24px rgba(192,57,43,0.35);
+    letter-spacing:.5px;
+  }
+  .modal-save:hover {
+    transform:translateY(-1px);
+    box-shadow:0 12px 30px rgba(192,57,43,0.5);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align:center;
+    padding:40px 20px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    margin-top:20px;
+  }
+  .footer p { font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:2px; }
+  .footer-brand {
+    font-family:'Playfair Display',serif;
+    font-size:18px;
+    color:var(--red);
+    margin-bottom:8px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--red); border-radius:2px; }
+
+  /* ── Toast ── */
+  .toast {
+    position:fixed;
+    bottom:30px; left:50%;
+    transform:translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg,#1c1c1c,#2a2a2a);
+    border:1px solid var(--border);
+    color:#fff;
+    padding:12px 24px;
+    border-radius:50px;
+    font-size:13px;
+    z-index:200;
+    transition:transform .3s cubic-bezier(.25,.8,.25,1);
+    box-shadow:0 8px 30px rgba(0,0,0,.5);
+    white-space:nowrap;
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  /* ── Responsive ── */
+  @media(max-width:480px){
+    .menu-grid { grid-template-columns:1fr; }
+    .hero-title { font-size:36px; }
+    .form-row { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <p class="hero-ornament">✦ ยินดีต้อนรับ ✦</p>
+  <h1 class="hero-title">ROUGE<span>&</span>NOIR</h1>
+  <p class="hero-title" style="font-size:clamp(14px,3vw,22px);font-style:italic;font-weight:300;color:var(--gold-light);margin-top:4px;font-family:'Cormorant Garamond',serif;letter-spacing:3px;">Fine Dining Experience</p>
+  <p class="hero-sub">สแกน QR เพื่อดูเมนูพิเศษของเรา</p>
+  <div class="hero-line"><span class="hero-line-icon">✦</span></div>
+</header>
+
+<!-- Category Filter -->
+<nav class="categories" id="catNav">
+  <button class="cat-btn active" onclick="filterCat('all',this)"><span>ทั้งหมด</span></button>
+  <button class="cat-btn" onclick="filterCat('starter',this)"><span>🥗 อาหารเรียกน้ำย่อย</span></button>
+  <button class="cat-btn" onclick="filterCat('main',this)"><span>🍽 อาหารหลัก</span></button>
+  <button class="cat-btn" onclick="filterCat('grill',this)"><span>🔥 จากเตาย่าง</span></button>
+  <button class="cat-btn" onclick="filterCat('dessert',this)"><span>🍮 ของหวาน</span></button>
+  <button class="cat-btn" onclick="filterCat('drink',this)"><span>🍷 เครื่องดื่ม</span></button>
+</nav>
+
+<!-- Menu Container -->
+<main id="menuContainer"></main>
+
+<!-- Add Item Button -->
+<div class="add-item-wrap">
+  <button class="add-item-btn" onclick="openModal()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    เพิ่มเมนูอาหารใหม่
+  </button>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p class="footer-brand">ROUGE & NOIR</p>
+  <p>© 2025 · เมนูนี้จัดทำเพื่อการแสดงผล QR Code</p>
+</footer>
+
+<!-- Add Menu Modal -->
+<div class="modal-bg hidden" id="modal">
+  <div class="modal">
+    <h2 class="modal-title">เพิ่มเมนูใหม่</h2>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <!-- Image Upload -->
+    <div class="form-group">
+      <label class="form-label">รูปภาพอาหาร</label>
+      <div class="modal-img-upload" id="imgUploadArea">
+        <input type="file" accept="image/*" onchange="previewModalImg(this)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.7)" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        <p>คลิกหรือลากรูปมาวาง</p>
+        <img class="modal-preview" id="modalPreview" alt="">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ชื่อเมนู (EN)</label>
+        <input class="form-input" id="inp-name-en" placeholder="e.g. Grilled Salmon">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ชื่อเมนู (TH)</label>
+        <input class="form-input" id="inp-name-th" placeholder="เช่น ปลาแซลมอนย่าง">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">รายละเอียด</label>
+      <textarea class="form-textarea" id="inp-desc" placeholder="บรรยายรสชาติ วัตถุดิบ หรือจุดเด่นของเมนู..."></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ราคา (บาท)</label>
+        <input class="form-input" id="inp-price" type="number" placeholder="280">
+      </div>
+      <div class="form-group">
+        <label class="form-label">หมวดหมู่</label>
+        <select class="form-select" id="inp-cat">
+          <option value="starter">อาหารเรียกน้ำย่อย</option>
+          <option value="main">อาหารหลัก</option>
+          <option value="grill">จากเตาย่าง</option>
+          <option value="dessert">ของหวาน</option>
+          <option value="drink">เครื่องดื่ม</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">ป้ายกำกับ</label>
+      <div class="modal-tags-wrap">
+        <button class="tag-toggle" data-tag="spicy" onclick="toggleTag(this)">🌶 เผ็ด</button>
+        <button class="tag-toggle" data-tag="veg" onclick="toggleTag(this)">🌿 มังสวิรัติ</button>
+        <button class="tag-toggle" data-tag="pop" onclick="toggleTag(this)">⭐ ยอดนิยม</button>
+        <button class="tag-toggle" data-tag="new" onclick="toggleTag(this)">✨ ใหม่</button>
+      </div>
+    </div>
+
+    <button class="modal-save" onclick="saveItem()">บันทึกเมนู</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── Data ───────────────────────────────────────────────
+let menuItems = [
+  {
+    id:1, cat:'starter',
+    nameEn:'Burrata & Heritage Tomato', nameTh:'บูร์ราต้ากับมะเขือเทศสด',
+    desc:'ครีมบูร์ราต้าสดจากอิตาลี เสิร์ฟคู่มะเขือเทศเฮอริเทจสีสันสวยงาม ราดด้วยน้ำมันมะกอก Extra Virgin',
+    price:320, tags:['veg','pop'], img:null, badge:'แนะนำ'
+  },
+  {
+    id:2, cat:'main',
+    nameEn:'Wagyu Beef Tenderloin', nameTh:'วากิวเทนเดอร์ลอยน์',
+    desc:'เนื้อวากิวคัดพิเศษ Marble 7+ ย่างไฟอ่อนๆ เสิร์ฟพร้อม Truffle Jus และมันบดเนย',
+    price:1280, tags:['pop','new'], img:null, badge:'Signature'
+  },
+  {
+    id:3, cat:'grill',
+    nameEn:'Tiger Prawn Skewer', nameTh:'กุ้งแม่น้ำเสียบไม้',
+    desc:'กุ้งแม่น้ำตัวใหญ่หมักเครื่องเทศ ย่างบนเตาถ่าน เสิร์ฟพร้อม Chimichurri Sauce',
+    price:580, tags:['spicy','pop'], img:null, badge:null
+  },
+  {
+    id:4, cat:'dessert',
+    nameEn:'Dark Chocolate Lava', nameTh:'ลาวาช็อกโกแลตเข้ม',
+    desc:'เค้กช็อกโกแลตร้อน 72% Cacao หัวใจเป็นของเหลวเข้มข้น คู่กับไอศกรีมวานิลลา Madagascar',
+    price:240, tags:['pop'], img:null, badge:null
+  },
+  {
+    id:5, cat:'drink',
+    nameEn:'Rose & Lychee Sangria', nameTh:'ซังเกรียลิ้นจี่กุหลาบ',
+    desc:'ไวน์โรเซ่ผสมลิ้นจี่สด น้ำกุหลาบ และผลไม้ตามฤดูกาล เสิร์ฟในแก้วทรงสูง',
+    price:280, tags:['new'], img:null, badge:null
+  },
+  {
+    id:6, cat:'starter',
+    nameEn:'Foie Gras Toast', nameTh:'ฟัวกราส์บนขนมปังกรอบ',
+    desc:'ฟัวกราส์เกรด A พันช่วงบนขนมปัง Brioche ทอด ราดน้ำผึ้งดำและ Balsamic Reduction',
+    price:480, tags:['pop'], img:null, badge:'Chef\'s Pick'
+  },
+];
+
+let selectedTags = [];
+let modalImgData = null;
+let currentFilter = 'all';
+
+// ─── Render ─────────────────────────────────────────────
+function catLabel(cat) {
+  const m = {starter:'🥗 อาหารเรียกน้ำย่อย', main:'🍽 อาหารหลัก', grill:'🔥 จากเตาย่าง', dessert:'🍮 ของหวาน', drink:'🍷 เครื่องดื่ม'};
+  return m[cat] || cat;
+}
+
+function renderMenu() {
+  const container = document.getElementById('menuContainer');
+  const filtered = currentFilter === 'all' ? menuItems : menuItems.filter(i => i.cat === currentFilter);
+  
+  // Group by category
+  const groups = {};
+  filtered.forEach(item => {
+    if (!groups[item.cat]) groups[item.cat] = [];
+    groups[item.cat].push(item);
+  });
+
+  container.innerHTML = '';
+
+  if (Object.keys(groups).length === 0) {
+    container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px;font-size:14px;">ยังไม่มีเมนูในหมวดนี้</p>';
+    return;
+  }
+
+  // Render in category order
+  const order = ['starter','main','grill','dessert','drink'];
+  order.forEach(cat => {
+    if (!groups[cat]) return;
+    const section = document.createElement('section');
+    section.innerHTML = `
+      <div class="section-title">
+        <h2>${catLabel(cat)}</h2>
+        <div class="section-title-line"></div>
+      </div>
+      <div class="menu-grid">${groups[cat].map(cardHTML).join('')}</div>
+    `;
+    container.appendChild(section);
+  });
+}
+
+function cardHTML(item) {
+  const imgContent = item.img
+    ? `<img src="${item.img}" alt="${item.nameEn}" loading="lazy"><div class="card-img-overlay"></div>`
+    : `<div class="card-img-placeholder" onclick="triggerUpload(${item.id})">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.7)" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        <p>อัพโหลดรูปภาพ</p>
+       </div>`;
+
+  const tagsHTML = item.tags.map(t => {
+    if (t==='spicy') return `<span class="tag tag-spicy">🌶 เผ็ด</span>`;
+    if (t==='veg')   return `<span class="tag tag-veg">🌿 มังสวิรัติ</span>`;
+    if (t==='pop')   return `<span class="tag tag-pop">⭐ ยอดนิยม</span>`;
+    if (t==='new')   return `<span class="tag tag-new">✨ ใหม่</span>`;
+  }).join('');
+
+  const badge = item.badge ? `<div class="card-badge">${item.badge}</div>` : '';
+
+  return `
+  <div class="menu-card" id="card-${item.id}">
+    <div class="card-img-wrap">
+      ${imgContent}
+      ${badge}
+      <label class="upload-trigger" title="เปลี่ยนรูปภาพ">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        อัพโหลด
+        <input type="file" accept="image/*" onchange="uploadCardImg(${item.id}, this)">
+      </label>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${item.nameEn}</div>
+      <div class="card-name-th">${item.nameTh}</div>
+      ${item.tags.length ? `<div class="card-tags">${tagsHTML}</div>` : ''}
+      <div class="card-desc">${item.desc}</div>
+      <div class="card-footer">
+        <div class="card-price">฿${item.price.toLocaleString()}<span>บาท</span></div>
+        <button class="card-add" onclick="addToOrder('${item.nameEn}')">+</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── Filter ─────────────────────────────────────────────
+function filterCat(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenu();
+}
+
+// ─── Upload ─────────────────────────────────────────────
+function triggerUpload(id) {
+  const card = document.getElementById('card-'+id);
+  if (!card) return;
+  const inp = card.querySelector('.upload-trigger input');
+  if (inp) inp.click();
+}
+
+function uploadCardImg(id, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const idx = menuItems.findIndex(m => m.id === id);
+    if (idx > -1) {
+      menuItems[idx].img = e.target.result;
+      renderMenu();
+      showToast('✓ อัพโหลดรูปภาพสำเร็จ');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── Modal ──────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+  document.body.style.overflow = '';
+  resetModal();
+}
+function resetModal() {
+  ['inp-name-en','inp-name-th','inp-desc','inp-price'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('inp-cat').value = 'starter';
+  document.getElementById('modalPreview').style.display = 'none';
+  document.querySelectorAll('.tag-toggle').forEach(t => {
+    t.className = 'tag-toggle';
+  });
+  selectedTags = [];
+  modalImgData = null;
+}
+
+function previewModalImg(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const prev = document.getElementById('modalPreview');
+    prev.src = e.target.result;
+    prev.style.display = 'block';
+    modalImgData = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleTag(btn) {
+  const tag = btn.dataset.tag;
+  const activeClass = `active-${tag}`;
+  if (btn.classList.contains(activeClass)) {
+    btn.classList.remove(activeClass);
+    selectedTags = selectedTags.filter(t => t !== tag);
+  } else {
+    btn.classList.add(activeClass);
+    selectedTags.push(tag);
+  }
+}
+
+function saveItem() {
+  const nameEn = document.getElementById('inp-name-en').value.trim();
+  const nameTh = document.getElementById('inp-name-th').value.trim();
+  const desc   = document.getElementById('inp-desc').value.trim();
+  const price  = parseFloat(document.getElementById('inp-price').value);
+  const cat    = document.getElementById('inp-cat').value;
+
+  if (!nameEn || !nameTh || isNaN(price) || price <= 0) {
+    showToast('⚠️ กรุณากรอกข้อมูลให้ครบถ้วน');
+    return;
+  }
+
+  const newItem = {
+    id: Date.now(),
+    cat, nameEn, nameTh, desc,
+    price, tags: [...selectedTags],
+    img: modalImgData,
+    badge: null
+  };
+
+  menuItems.push(newItem);
+  closeModal();
+  currentFilter = 'all';
+  document.querySelectorAll('.cat-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  renderMenu();
+  showToast('✓ เพิ่มเมนูสำเร็จ!');
+}
+
+// ─── Toast ──────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── Order ──────────────────────────────────────────────
+function addToOrder(name) {
+  showToast(`🛒 เพิ่ม "${name}" แล้ว`);
+}
+
+// ─── Close modal on backdrop ────────────────────────────
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ─── Init ────────────────────────────────────────────────
+renderMenu();
+</script>
+</body>
+</html>
