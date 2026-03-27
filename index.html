@@ -4,30 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>เมนูอาหาร — Fine Dining</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Serif+Thai:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Serif+Thai:wght@300;400;600;700&family=Noto+Serif+SC:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #0a0a0a;
-    --deep: #111111;
-    --card: #161616;
-    --card2: #1c1c1c;
+    /* เปลี่ยนโทนสีเป็นแดงเบอร์กันดี (Red Theme) */
+    --bg-main: #140505; /* แดงเข้มมาก/ดำ */
+    --deep: #0a0202;
+    --card: #240a0a; /* พื้นหลังการ์ดสีแดงมืด */
+    --card-hover: #330e0e;
     --red: #c0392b;
     --red-bright: #e74c3c;
-    --red-glow: #ff2e1f;
     --gold: #c9a84c;
     --gold-light: #e8c97a;
     --cream: #f5e6d3;
     --text: #e8ddd0;
-    --muted: #888;
-    --border: rgba(192,57,43,0.3);
+    --muted: #a8948b;
+    --border: rgba(192, 57, 43, 0.3); /* ขอบสีแดงบางๆ */
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
-    background: var(--black);
+    background-color: var(--bg-main);
+    /* พื้นหลังแบบไล่สีแดงเข้ม (Radial Gradient) */
+    background-image: radial-gradient(circle at top center, #2e0808 0%, #0a0202 100%);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
     color: var(--text);
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Noto Serif Thai', 'Noto Serif SC', serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
@@ -37,38 +42,64 @@
     content:'';
     position:fixed;
     inset:0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
     pointer-events:none;
     z-index:0;
-    opacity:.6;
+  }
+
+  /* ── Top Bar (Language) ── */
+  .top-bar {
+    position: absolute;
+    top: 20px; right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  .lang-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: sans-serif;
+  }
+  .lang-btn.active {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red);
+    font-weight: bold;
   }
 
   /* ── Hero Header ── */
   .hero {
     position: relative;
-    padding: 60px 24px 40px;
+    padding: 80px 24px 40px;
     text-align: center;
     overflow: hidden;
+    z-index: 1;
   }
 
   .hero::before {
     content: '';
     position: absolute;
-    top: -60px; left: 50%;
+    top: -100px; left: 50%;
     transform: translateX(-50%);
-    width: 600px; height: 300px;
-    background: radial-gradient(ellipse, rgba(192,57,43,0.25) 0%, transparent 70%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(192,57,43,0.2) 0%, transparent 70%);
     pointer-events: none;
   }
 
   .hero-ornament {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 6px;
     color: var(--gold);
     text-transform: uppercase;
     margin-bottom: 16px;
-    opacity: .8;
+    opacity: .9;
   }
 
   .hero-title {
@@ -78,93 +109,70 @@
     line-height: 1;
     color: #fff;
     letter-spacing: -1px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
   }
 
   .hero-title span {
-    color: var(--red-bright);
+    color: var(--gold);
     font-style: italic;
   }
 
   .hero-sub {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--muted);
-    margin-top: 12px;
-    letter-spacing: 2px;
-  }
-
-  .hero-line {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 28px auto 0;
-    max-width: 320px;
-  }
-  .hero-line::before, .hero-line::after {
-    content:'';
-    flex:1;
-    height:1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .hero-line-icon {
-    color: var(--gold);
-    font-size: 16px;
+    margin-top: 16px;
+    letter-spacing: 1px;
   }
 
   /* ── Category Filter ── */
   .categories {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
-    padding: 20px 20px;
+    padding: 10px 20px 30px;
     scrollbar-width: none;
     justify-content: center;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
   }
   .categories::-webkit-scrollbar { display:none; }
 
   .cat-btn {
     background: var(--card);
     border: 1px solid var(--border);
-    color: var(--muted);
+    color: var(--cream);
     padding: 8px 20px;
     border-radius: 50px;
-    font-family: 'Noto Serif Thai', serif;
+    font-family: inherit;
     font-size: 13px;
     cursor: pointer;
     transition: all .25s;
     white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-  }
-  .cat-btn::before {
-    content:'';
-    position:absolute;
-    inset:0;
-    background: linear-gradient(135deg, var(--red) 0%, transparent 100%);
-    opacity:0;
-    transition: opacity .25s;
   }
   .cat-btn:hover, .cat-btn.active {
+    background: var(--red);
     color: #fff;
-    border-color: var(--red);
-    box-shadow: 0 0 20px rgba(192,57,43,0.35);
+    border-color: var(--red-bright);
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(192,57,43,0.4);
   }
-  .cat-btn:hover::before, .cat-btn.active::before { opacity:1; }
-  .cat-btn span { position:relative; z-index:1; }
 
-  /* ── Section Title ── */
+  /* ── Menu Grid ── */
+  .menu-container { position: relative; z-index: 1; }
   .section-title {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 24px 20px 16px;
+    max-width: 1100px;
+    margin: 0 auto;
   }
   .section-title h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
-    color: var(--cream);
+    color: var(--gold-light);
   }
   .section-title-line {
     flex:1;
@@ -172,12 +180,11 @@
     background: linear-gradient(90deg, var(--border), transparent);
   }
 
-  /* ── Menu Grid ── */
   .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    padding: 0 16px 24px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 0 20px 40px;
     max-width: 1100px;
     margin: 0 auto;
   }
@@ -185,38 +192,33 @@
   /* ── Menu Card ── */
   .menu-card {
     background: var(--card);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.04);
     border-radius: 16px;
     overflow: hidden;
     transition: all .3s cubic-bezier(.25,.8,.25,1);
     position: relative;
-    animation: fadeUp .5s ease both;
+    display: flex;
+    flex-direction: column;
   }
   .menu-card:hover {
     transform: translateY(-4px);
+    background: var(--card-hover);
     border-color: var(--border);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(192,57,43,0.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
   }
 
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(20px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
-
-  /* Image area */
   .card-img-wrap {
     position: relative;
-    height: 200px;
-    background: var(--card2);
+    height: 220px;
+    background: var(--deep);
     overflow: hidden;
-    cursor: pointer;
   }
   .card-img-wrap img {
     width:100%; height:100%;
     object-fit: cover;
-    transition: transform .4s ease;
+    transition: transform .5s ease;
   }
-  .menu-card:hover .card-img-wrap img { transform: scale(1.06); }
+  .menu-card:hover .card-img-wrap img { transform: scale(1.05); }
 
   .card-img-placeholder {
     width:100%; height:100%;
@@ -225,163 +227,139 @@
     align-items:center;
     justify-content:center;
     gap:10px;
-    background: repeating-linear-gradient(
-      45deg,
-      #161616 0px,
-      #161616 10px,
-      #1a1a1a 10px,
-      #1a1a1a 20px
-    );
-    transition: background .3s;
+    background: rgba(0,0,0,0.2);
     cursor: pointer;
   }
-  .card-img-placeholder:hover { background: #1e1212; }
-  .card-img-placeholder svg { opacity:.35; }
-  .card-img-placeholder p {
-    font-size:11px;
-    color: var(--muted);
-    letter-spacing:1px;
-  }
+  .card-img-placeholder svg { opacity:.4; color: var(--red); }
+  .card-img-placeholder p { font-size:12px; color: var(--muted); }
 
   .card-img-overlay {
     position:absolute;
     inset:0;
-    background: linear-gradient(to top, rgba(10,10,10,.9) 0%, transparent 50%);
+    background: linear-gradient(to top, var(--card) 0%, transparent 60%);
   }
 
-  /* Badge */
   .card-badge {
     position:absolute;
     top:12px; right:12px;
     background: var(--red);
-    color:#fff;
-    font-size:10px;
-    padding:4px 10px;
+    color: #fff;
+    font-size:11px;
+    padding:4px 12px;
     border-radius:50px;
-    letter-spacing:1px;
-    font-weight:600;
-    box-shadow: 0 4px 12px rgba(192,57,43,0.5);
+    font-weight:700;
+    box-shadow: 0 4px 12px rgba(192,57,43,0.4);
   }
 
-  /* Upload overlay trigger */
-  .upload-trigger {
-    position:absolute;
-    top:12px; left:12px;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    border:1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.7);
-    font-size:10px;
-    padding:5px 10px;
-    border-radius:8px;
-    cursor:pointer;
-    transition: all .2s;
-    display:flex;
-    align-items:center;
-    gap:5px;
-    letter-spacing:.5px;
-  }
-  .upload-trigger:hover {
-    background: rgba(192,57,43,0.7);
-    border-color: var(--red);
-    color:#fff;
-  }
-  .upload-trigger input { display:none; }
-
-  /* Card body */
-  .card-body {
-    padding: 16px 18px 18px;
-  }
+  .card-body { padding: 0 20px 20px; flex: 1; display: flex; flex-direction: column; position: relative; z-index: 2; margin-top: -20px; }
   .card-name {
     font-family: 'Playfair Display', serif;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     color: #fff;
     line-height: 1.3;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
-  .card-name-th {
+  .card-name-sub {
     font-size: 13px;
     color: var(--gold-light);
-    margin-bottom: 8px;
-    font-weight:300;
+    margin-bottom: 12px;
+    font-weight: 400;
   }
   .card-desc {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     line-height: 1.6;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
+    flex: 1;
   }
   .card-footer {
     display:flex;
     align-items:center;
     justify-content:space-between;
+    margin-top: auto;
   }
   .card-price {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
-    color: var(--red-bright);
+    color: var(--cream);
   }
   .card-price span {
-    font-size:12px;
+    font-size:13px;
     font-weight:400;
     color:var(--muted);
-    font-family: 'Noto Serif Thai', serif;
-    margin-left:2px;
+    font-family: inherit;
+    margin-left:4px;
   }
-  .card-add {
-    width:36px; height:36px;
-    border-radius:50%;
-    background: linear-gradient(135deg, var(--red), #8b1a0f);
-    border:none;
-    color:#fff;
-    font-size:20px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition: all .2s;
-    box-shadow: 0 4px 14px rgba(192,57,43,0.4);
-  }
-  .card-add:hover {
-    transform:scale(1.12);
-    box-shadow: 0 6px 20px rgba(192,57,43,0.6);
-  }
-  .card-add:active { transform:scale(0.95); }
 
-  /* Spicy / veg tags */
-  .card-tags {
-    display:flex;
-    gap:6px;
-    margin-bottom:10px;
-    flex-wrap:wrap;
+  /* Admin Actions Overlay */
+  .admin-actions {
+    position: absolute;
+    top: 10px; left: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
   }
-  .tag {
-    font-size:10px;
-    padding:2px 8px;
-    border-radius:4px;
-    letter-spacing:.5px;
+  .admin-btn {
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
   }
-  .tag-spicy { background:rgba(231,76,60,.15); color:#ff7675; border:1px solid rgba(231,76,60,.3); }
-  .tag-veg   { background:rgba(39,174,96,.1); color:#55efc4; border:1px solid rgba(39,174,96,.25); }
-  .tag-pop   { background:rgba(201,168,76,.1); color:var(--gold-light); border:1px solid rgba(201,168,76,.25); }
-  .tag-new   { background:rgba(108,92,231,.1); color:#a29bfe; border:1px solid rgba(108,92,231,.25); }
+  .admin-btn.edit:hover { background: var(--red); color: #fff; border-color: var(--red-bright); }
+  .admin-btn.delete:hover { background: var(--red-bright); border-color: var(--red-bright); }
 
-  /* ── Add Item Button ── */
+  /* ── Admin Dashboard Layout ── */
+  #adminView {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
+  }
+  .admin-topbar {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+    border-bottom: 1px solid var(--border); padding-bottom: 20px;
+  }
+  .admin-topbar h2 { color: var(--red-bright); font-family: 'Playfair Display', serif; font-size: 28px; }
+  .admin-btn-back { background: var(--card); border: 1px solid var(--border); color: var(--cream); padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+  .admin-btn-back:hover { background: var(--card-hover); border-color: var(--red); }
+  
+  .admin-header-actions {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+  }
+
+  .admin-table-wrap { overflow-x: auto; background: var(--card); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+  .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+  .admin-table th { background: rgba(0,0,0,0.3); color: var(--gold-light); padding: 16px; font-weight: 600; white-space: nowrap; }
+  .admin-table td { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text); vertical-align: middle; }
+  .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .admin-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--deep); }
+  .admin-thumb-placeholder { width: 50px; height: 50px; border-radius: 8px; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 10px; }
+  .admin-actions-cell { display: flex; gap: 8px; }
+
+  /* ── Add Item Button (Admin Only) ── */
   .add-item-wrap {
-    padding: 8px 16px 32px;
-    display:flex;
+    padding: 0 20px 40px;
+    display:none; /* Hidden by default */
     justify-content:center;
+    position: relative; z-index: 1;
   }
+  .add-item-wrap.show { display: flex; }
   .add-item-btn {
-    background: transparent;
-    border: 1.5px dashed rgba(192,57,43,0.5);
-    color: var(--muted);
-    padding: 14px 32px;
+    background: rgba(192,57,43,0.05);
+    border: 1.5px dashed var(--red);
+    color: var(--red-bright);
+    padding: 16px 32px;
     border-radius: 12px;
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 13px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
     cursor:pointer;
     display:flex;
     align-items:center;
@@ -391,11 +369,7 @@
     max-width:400px;
     justify-content:center;
   }
-  .add-item-btn:hover {
-    border-color: var(--red);
-    color: var(--red-bright);
-    background: rgba(192,57,43,0.05);
-  }
+  .add-item-btn:hover { background: rgba(192,57,43,0.15); }
 
   /* ── Modal ── */
   .modal-bg {
@@ -418,84 +392,90 @@
     border: 1px solid var(--border);
     border-radius: 20px;
     width: 100%;
-    max-width: 480px;
-    padding: 28px;
-    animation: slideUp .3s cubic-bezier(.25,.8,.25,1);
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
     position:relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
   }
-  @keyframes slideUp {
-    from{opacity:0;transform:translateY(30px)}
-    to{opacity:1;transform:translateY(0)}
-  }
+  
+  .modal::-webkit-scrollbar { width:6px; }
+  .modal::-webkit-scrollbar-thumb { background:var(--red); border-radius:3px; }
 
   .modal-title {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color:#fff;
-    margin-bottom:20px;
-    padding-right:30px;
+    font-size: 24px;
+    color:var(--red-bright);
+    margin-bottom:24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 15px;
   }
 
   .modal-close {
     position:absolute;
-    top:20px; right:20px;
+    top:25px; right:25px;
     background:none;
     border:none;
     color:var(--muted);
-    font-size:22px;
+    font-size:24px;
     cursor:pointer;
-    transition:color .2s;
   }
-  .modal-close:hover { color:var(--red-bright); }
+  .modal-close:hover { color:#fff; }
 
-  .form-group { margin-bottom:16px; }
+  .form-group { margin-bottom:18px; }
   .form-label {
     display:block;
-    font-size:11px;
-    letter-spacing:1.5px;
-    color:var(--muted);
-    margin-bottom:6px;
-    text-transform:uppercase;
+    font-size:12px;
+    color:var(--gold-light);
+    margin-bottom:8px;
   }
   .form-input, .form-textarea, .form-select {
     width:100%;
     background: var(--deep);
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
     color:var(--text);
-    padding:10px 14px;
-    border-radius:10px;
-    font-family:'Noto Serif Thai', serif;
+    padding:12px 14px;
+    border-radius:8px;
+    font-family:inherit;
     font-size:14px;
     outline:none;
     transition: border-color .2s;
   }
-  .form-input:focus, .form-textarea:focus, .form-select:focus {
-    border-color: var(--red);
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--red); }
+  .form-textarea { resize:vertical; min-height:60px; }
+  
+  /* Lang Grouping in Modal */
+  .lang-group {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.03);
   }
-  .form-textarea { resize:vertical; min-height:80px; }
-  .form-select option { background: var(--deep); }
+  .lang-group-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--muted); margin-bottom: 12px;
+  }
 
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
   .modal-img-upload {
     border:2px dashed rgba(192,57,43,0.4);
     border-radius:12px;
-    height:120px;
+    height:140px;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     gap:8px;
     cursor:pointer;
-    transition: all .25s;
-    background: rgba(192,57,43,0.03);
+    background: rgba(0,0,0,0.3);
     position:relative;
     overflow:hidden;
   }
-  .modal-img-upload:hover { border-color:var(--red); background:rgba(192,57,43,0.07); }
+  .modal-img-upload:hover { border-color:var(--red); }
   .modal-img-upload input { position:absolute; inset:0; opacity:0; cursor:pointer; }
-  .modal-img-upload p { font-size:12px; color:var(--muted); }
-
   .modal-preview {
     width:100%; height:100%;
     object-fit:cover;
@@ -504,43 +484,29 @@
     display:none;
   }
 
-  .modal-tags-wrap { display:flex; gap:8px; flex-wrap:wrap; }
-  .tag-toggle {
-    padding:5px 12px;
-    border-radius:6px;
-    font-size:11px;
-    cursor:pointer;
-    border:1px solid rgba(255,255,255,0.1);
-    background:transparent;
-    color:var(--muted);
-    transition:all .2s;
-    font-family:'Noto Serif Thai',serif;
-  }
-  .tag-toggle.active-spicy { background:rgba(231,76,60,.2); color:#ff7675; border-color:rgba(231,76,60,.4); }
-  .tag-toggle.active-veg   { background:rgba(39,174,96,.15); color:#55efc4; border-color:rgba(39,174,96,.35); }
-  .tag-toggle.active-pop   { background:rgba(201,168,76,.15); color:var(--gold-light); border-color:rgba(201,168,76,.35); }
-  .tag-toggle.active-new   { background:rgba(108,92,231,.15); color:#a29bfe; border-color:rgba(108,92,231,.35); }
-
   .modal-save {
     width:100%;
-    background: linear-gradient(135deg, var(--red) 0%, #8b1a0f 100%);
+    background: var(--red);
     border:none;
     color:#fff;
-    padding:14px;
-    border-radius:12px;
-    font-family:'Playfair Display',serif;
+    padding:16px;
+    border-radius:8px;
     font-size:16px;
     font-weight:700;
     cursor:pointer;
-    margin-top:20px;
+    margin-top:10px;
     transition:all .2s;
-    box-shadow: 0 8px 24px rgba(192,57,43,0.35);
-    letter-spacing:.5px;
   }
-  .modal-save:hover {
-    transform:translateY(-1px);
-    box-shadow:0 12px 30px rgba(192,57,43,0.5);
+  .modal-save:hover { background: var(--red-bright); transform:translateY(-2px); }
+
+  /* ── Confirm Modal ── */
+  .confirm-modal {
+    background: var(--card); padding: 30px; border-radius: 16px; text-align: center; border: 1px solid var(--red); max-width: 350px; width: 100%;
   }
+  .confirm-btn-wrap { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+  .confirm-btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; flex: 1; }
+  .btn-cancel { background: var(--deep); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+  .btn-del { background: var(--red-bright); color: #fff; }
 
   /* ── Footer ── */
   .footer {
@@ -548,148 +514,226 @@
     padding:40px 20px;
     border-top:1px solid rgba(255,255,255,0.05);
     margin-top:20px;
+    position: relative; z-index: 1;
   }
-  .footer p { font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:2px; }
-  .footer-brand {
-    font-family:'Playfair Display',serif;
-    font-size:18px;
-    color:var(--red);
-    margin-bottom:8px;
+  .footer-brand { font-family:'Playfair Display',serif; font-size:20px; color:var(--gold); margin-bottom:10px; }
+  
+  .admin-toggle {
+    background: none; border: 1px solid rgba(255,255,255,0.2); color: var(--muted);
+    padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; margin-top: 20px;
   }
-
-  /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width:4px; }
-  ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:var(--red); border-radius:2px; }
+  .admin-toggle.on { background: rgba(255,255,255,0.1); color: #fff; border-color: #fff; }
 
   /* ── Toast ── */
   .toast {
     position:fixed;
     bottom:30px; left:50%;
     transform:translateX(-50%) translateY(80px);
-    background: linear-gradient(135deg,#1c1c1c,#2a2a2a);
-    border:1px solid var(--border);
-    color:#fff;
+    background: var(--red);
+    color: #fff;
     padding:12px 24px;
     border-radius:50px;
-    font-size:13px;
+    font-size:14px;
+    font-weight: 600;
     z-index:200;
     transition:transform .3s cubic-bezier(.25,.8,.25,1);
-    box-shadow:0 8px 30px rgba(0,0,0,.5);
-    white-space:nowrap;
+    box-shadow:0 8px 30px rgba(192,57,43,.4);
+    opacity: 0;
   }
-  .toast.show { transform:translateX(-50%) translateY(0); }
+  .toast.show { transform:translateX(-50%) translateY(0); opacity: 1; }
 
-  /* ── Responsive ── */
-  @media(max-width:480px){
-    .menu-grid { grid-template-columns:1fr; }
-    .hero-title { font-size:36px; }
-    .form-row { grid-template-columns:1fr; }
+  /* ── Responsive Mobile/Tablet ── */
+  @media (max-width: 768px) {
+    .menu-grid { padding: 0 16px 30px; gap: 16px; }
+    .admin-topbar { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .modal { padding: 20px; }
+  }
+
+  @media (max-width: 480px) {
+    /* ปรับ Layout ด้านบนใหม่สำหรับมือถือจอเล็ก */
+    .top-bar { top: 12px; right: 12px; }
+    .lang-btn { padding: 4px 8px; font-size: 11px; }
+    
+    .hero { padding: 60px 16px 30px; }
+    .hero-title { font-size: clamp(32px, 10vw, 42px); }
+    .hero-sub { font-size: 13px; }
+
+    /* ปรับ Grid ให้เป็นแถวเดียวพอดีจอ */
+    .menu-grid { grid-template-columns: 1fr; }
+    
+    .card-img-wrap { height: 180px; }
+    .section-title h2 { font-size: 20px; }
+    
+    /* ปรับปุ่มและหัวข้อ Admin สำหรับมือถือ */
+    .admin-header-actions { flex-direction: column; align-items: stretch; gap: 15px; }
+    .admin-header-actions .add-item-btn { max-width: 100%; }
+    
+    /* ปรับฟอร์มต่างๆ ให้ซ้อนทับกันเต็มจอ */
+    .form-row { grid-template-columns: 1fr; gap: 10px; }
+    /* ขยายขนาดตัวอักษรของ Input เพื่อป้องกัน iOS Auto-Zoom */
+    .form-input, .form-textarea, .form-select { font-size: 16px; }
+
+    /* ปรับตาราง Admin บนมือถือให้กดปุ่มง่ายขึ้น */
+    .admin-actions-cell { flex-direction: column; }
+    .admin-btn { text-align: center; width: 100%; padding: 8px; }
   }
 </style>
 </head>
 <body>
 
+<!-- ── Customer View ── -->
+<div id="customerView">
+
+<!-- Language Switcher -->
+<div class="top-bar">
+  <button class="lang-btn active" onclick="setLang('th')">TH</button>
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('zh')">中文</button>
+</div>
+
 <!-- Hero -->
 <header class="hero">
-  <p class="hero-ornament">✦ ยินดีต้อนรับ ✦</p>
-  <h1 class="hero-title">ROUGE<span>&</span>NOIR</h1>
-  <p class="hero-title" style="font-size:clamp(14px,3vw,22px);font-style:italic;font-weight:300;color:var(--gold-light);margin-top:4px;font-family:'Cormorant Garamond',serif;letter-spacing:3px;">Fine Dining Experience</p>
-  <p class="hero-sub">สแกน QR เพื่อดูเมนูพิเศษของเรา</p>
-  <div class="hero-line"><span class="hero-line-icon">✦</span></div>
+  <p class="hero-ornament" id="ui-welcome">✦ ยินดีต้อนรับ ✦</p>
+  <h1 class="hero-title">ยังไม่มีชื่อทำรอไว้ก่อน</h1>
+  <p class="hero-sub" id="ui-sub" style="color:var(--gold-light); font-style:italic; font-family:'Cormorant Garamond', serif; font-size:18px;">Fine Dining Experience</p>
+  <p class="hero-sub" id="ui-scan" style="margin-top:8px;">สแกน QR เพื่อดูเมนูพิเศษของเรา</p>
 </header>
 
 <!-- Category Filter -->
 <nav class="categories" id="catNav">
-  <button class="cat-btn active" onclick="filterCat('all',this)"><span>ทั้งหมด</span></button>
-  <button class="cat-btn" onclick="filterCat('starter',this)"><span>🥗 อาหารเรียกน้ำย่อย</span></button>
-  <button class="cat-btn" onclick="filterCat('main',this)"><span>🍽 อาหารหลัก</span></button>
-  <button class="cat-btn" onclick="filterCat('grill',this)"><span>🔥 จากเตาย่าง</span></button>
-  <button class="cat-btn" onclick="filterCat('dessert',this)"><span>🍮 ของหวาน</span></button>
-  <button class="cat-btn" onclick="filterCat('drink',this)"><span>🍷 เครื่องดื่ม</span></button>
+  <!-- Rendered via JS -->
 </nav>
 
 <!-- Menu Container -->
-<main id="menuContainer"></main>
-
-<!-- Add Item Button -->
-<div class="add-item-wrap">
-  <button class="add-item-btn" onclick="openModal()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    เพิ่มเมนูอาหารใหม่
-  </button>
-</div>
+<main id="menuContainer" class="menu-container"></main>
 
 <!-- Footer -->
 <footer class="footer">
-  <p class="footer-brand">ROUGE & NOIR</p>
-  <p>© 2025 · เมนูนี้จัดทำเพื่อการแสดงผล QR Code</p>
+  <p class="footer-brand">ยังไม่ได้ตั้งชื่อโว้ย</p>
+  <p style="font-size:11px; color:rgba(255,255,255,0.3);" id="ui-footer">© 2026 · เมนูจัดทำเพื่อการแสดงผล QR Code</p>
+  <button class="admin-toggle" onclick="promptAdminLogin()">เข้าสู่ระบบหลังบ้าน (Admin)</button>
 </footer>
 
-<!-- Add Menu Modal -->
+</div> <!-- End Customer View -->
+
+<!-- ── Admin Dashboard View ── -->
+<div id="adminView" style="display: none;">
+  <div class="admin-topbar">
+    <h2>Backoffice Dashboard</h2>
+    <button class="admin-btn-back" onclick="switchView('customer')">← กลับสู่หน้าเมนู</button>
+  </div>
+  <div class="admin-header-actions">
+    <h3 style="color: #fff;">จัดการรายการอาหาร</h3>
+    <button class="add-item-btn" onclick="openModal()" style="max-width: 200px; padding: 10px 20px; font-size: 13px;">+ เพิ่มเมนูใหม่</button>
+  </div>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>รูปภาพ</th>
+          <th>ชื่อเมนู (TH/EN)</th>
+          <th>หมวดหมู่</th>
+          <th>ราคา</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody id="adminTableBody">
+        <!-- Rendered via JS -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add/Edit Menu Modal -->
 <div class="modal-bg hidden" id="modal">
   <div class="modal">
-    <h2 class="modal-title">เพิ่มเมนูใหม่</h2>
+    <h2 class="modal-title" id="modalTitle">เพิ่มเมนูใหม่</h2>
     <button class="modal-close" onclick="closeModal()">✕</button>
 
-    <!-- Image Upload -->
     <div class="form-group">
-      <label class="form-label">รูปภาพอาหาร</label>
-      <div class="modal-img-upload" id="imgUploadArea">
+      <label class="form-label" id="lbl-img">รูปภาพอาหาร</label>
+      <div class="modal-img-upload">
         <input type="file" accept="image/*" onchange="previewModalImg(this)">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.7)" stroke-width="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
-          <path d="M21 15l-5-5L5 21"/>
-        </svg>
-        <p>คลิกหรือลากรูปมาวาง</p>
+        <p style="color:var(--muted);font-size:12px;" id="lbl-upload-hint">คลิกหรือลากรูปมาวาง</p>
         <img class="modal-preview" id="modalPreview" alt="">
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">ชื่อเมนู (EN)</label>
-        <input class="form-input" id="inp-name-en" placeholder="e.g. Grilled Salmon">
+        <label class="form-label" id="lbl-price">ราคา</label>
+        <input class="form-input" id="inp-price" type="number" placeholder="0">
       </div>
       <div class="form-group">
-        <label class="form-label">ชื่อเมนู (TH)</label>
-        <input class="form-input" id="inp-name-th" placeholder="เช่น ปลาแซลมอนย่าง">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">รายละเอียด</label>
-      <textarea class="form-textarea" id="inp-desc" placeholder="บรรยายรสชาติ วัตถุดิบ หรือจุดเด่นของเมนู..."></textarea>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">ราคา (บาท)</label>
-        <input class="form-input" id="inp-price" type="number" placeholder="280">
-      </div>
-      <div class="form-group">
-        <label class="form-label">หมวดหมู่</label>
+        <label class="form-label" id="lbl-cat">หมวดหมู่</label>
         <select class="form-select" id="inp-cat">
-          <option value="starter">อาหารเรียกน้ำย่อย</option>
-          <option value="main">อาหารหลัก</option>
-          <option value="grill">จากเตาย่าง</option>
-          <option value="dessert">ของหวาน</option>
-          <option value="drink">เครื่องดื่ม</option>
+          <option value="starter">Starter</option>
+          <option value="main">Main Course</option>
+          <option value="grill">Grill</option>
+          <option value="dessert">Dessert</option>
+          <option value="drink">Drink</option>
         </select>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">ป้ายกำกับ</label>
-      <div class="modal-tags-wrap">
-        <button class="tag-toggle" data-tag="spicy" onclick="toggleTag(this)">🌶 เผ็ด</button>
-        <button class="tag-toggle" data-tag="veg" onclick="toggleTag(this)">🌿 มังสวิรัติ</button>
-        <button class="tag-toggle" data-tag="pop" onclick="toggleTag(this)">⭐ ยอดนิยม</button>
-        <button class="tag-toggle" data-tag="new" onclick="toggleTag(this)">✨ ใหม่</button>
+    <!-- THAI -->
+    <div class="lang-group">
+      <div class="lang-group-title">ภาษาไทย (TH)</div>
+      <div class="form-group">
+        <input class="form-input" id="inp-name-th" placeholder="ชื่อเมนู (เช่น ปลาแซลมอนย่าง)">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <textarea class="form-textarea" id="inp-desc-th" placeholder="รายละเอียดเมนู..."></textarea>
       </div>
     </div>
 
-    <button class="modal-save" onclick="saveItem()">บันทึกเมนู</button>
+    <!-- ENGLISH -->
+    <div class="lang-group">
+      <div class="lang-group-title">English (EN)</div>
+      <div class="form-group">
+        <input class="form-input" id="inp-name-en" placeholder="Menu Name (e.g. Grilled Salmon)">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <textarea class="form-textarea" id="inp-desc-en" placeholder="Menu description..."></textarea>
+      </div>
+    </div>
+
+    <!-- CHINESE -->
+    <div class="lang-group">
+      <div class="lang-group-title">中文 (ZH)</div>
+      <div class="form-group">
+        <input class="form-input" id="inp-name-zh" placeholder="菜名 (例如：烤三文鱼)">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <textarea class="form-textarea" id="inp-desc-zh" placeholder="菜品描述..."></textarea>
+      </div>
+    </div>
+
+    <button class="modal-save" id="btnSave" onclick="saveItem()">บันทึกข้อมูล</button>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-bg hidden" id="confirmModal">
+  <div class="confirm-modal">
+    <h3 style="color:#fff; margin-bottom:10px;" id="confirm-title">ยืนยันการลบ?</h3>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;" id="confirm-desc">คุณต้องการลบเมนูนี้ใช่หรือไม่?</p>
+    <div class="confirm-btn-wrap">
+      <button class="confirm-btn btn-cancel" onclick="closeConfirm()" id="btn-cancel">ยกเลิก</button>
+      <button class="confirm-btn btn-del" onclick="executeDelete()" id="btn-del">ลบเมนู</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Login Modal -->
+<div class="modal-bg hidden" id="loginModal">
+  <div class="confirm-modal" style="max-width: 320px;">
+    <h3 style="color:var(--red-bright); margin-bottom:15px;" id="login-title">เข้าสู่ระบบหลังบ้าน</h3>
+    <input type="password" id="inp-password" class="form-input" placeholder="ใส่รหัสผ่าน" style="margin-bottom: 20px; text-align: center; font-family: sans-serif; letter-spacing: 2px;">
+    <div class="confirm-btn-wrap">
+      <button class="confirm-btn btn-cancel" onclick="closeLoginModal()" id="btn-login-cancel">ยกเลิก</button>
+      <button class="confirm-btn" style="background: var(--red); color: #fff;" onclick="verifyPassword()" id="btn-login-submit">เข้าสู่ระบบ</button>
+    </div>
   </div>
 </div>
 
@@ -697,61 +741,207 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── Data ───────────────────────────────────────────────
+// ─── Dictionary (3 Languages) ───────────────────────────
+const dict = {
+  th: {
+    welcome: "✦ ยินดีต้อนรับ ✦",
+    sub: "ประสบการณ์ไฟน์ไดน์นิ่ง",
+    scan: "สแกน QR เพื่อดูเมนูพิเศษของเรา",
+    cat_all: "ทั้งหมด", cat_starter: "อาหารเรียกน้ำย่อย", cat_main: "อาหารหลัก", cat_grill: "จากเตาย่าง", cat_dessert: "ของหวาน", cat_drink: "เครื่องดื่ม",
+    currency: "บาท",
+    empty: "ยังไม่มีเมนูในหมวดนี้",
+    add_cart: "เพิ่มลงตะกร้า",
+    admin_on: "Admin Mode: ON", admin_off: "Admin Mode: OFF",
+    btn_edit: "แก้ไข", btn_del: "ลบ",
+    add_menu: "+ เพิ่มเมนูอาหารใหม่",
+    footer: "© 2026 · เมนูจัดทำเพื่อการแสดงผล QR Code",
+    modal_add_title: "เพิ่มเมนูใหม่", modal_edit_title: "แก้ไขเมนู",
+    lbl_img: "รูปภาพอาหาร", lbl_hint: "คลิกหรือลากรูปมาวาง", lbl_price: "ราคา (บาท)", lbl_cat: "หมวดหมู่",
+    btn_save: "บันทึกข้อมูล",
+    conf_title: "ยืนยันการลบ?", conf_desc: "คุณแน่ใจหรือไม่ว่าต้องการลบเมนูนี้?", btn_cancel: "ยกเลิก", btn_confirm_del: "ลบ",
+    toast_save: "บันทึกข้อมูลสำเร็จ!", toast_del: "ลบเมนูแล้ว", toast_err: "กรุณากรอกชื่อและราคาให้ครบถ้วน",
+    login_title: "เข้าสู่ระบบผู้ดูแล", login_placeholder: "ใส่รหัสผ่าน", btn_login: "เข้าสู่ระบบ", toast_wrong_pwd: "รหัสผ่านไม่ถูกต้อง!"
+  },
+  en: {
+    welcome: "✦ WELCOME ✦",
+    sub: "Fine Dining Experience",
+    scan: "Scan QR to view our exclusive menu",
+    cat_all: "All", cat_starter: "Starters", cat_main: "Main Course", cat_grill: "From the Grill", cat_dessert: "Desserts", cat_drink: "Beverages",
+    currency: "THB",
+    empty: "No items in this category yet.",
+    add_cart: "Add",
+    admin_on: "Admin Mode: ON", admin_off: "Admin Mode: OFF",
+    btn_edit: "Edit", btn_del: "Delete",
+    add_menu: "+ Add New Menu Item",
+    footer: "© 2026 · Menu generated for QR display",
+    modal_add_title: "Add New Item", modal_edit_title: "Edit Item",
+    lbl_img: "Food Image", lbl_hint: "Click or drag image here", lbl_price: "Price (THB)", lbl_cat: "Category",
+    btn_save: "Save Item",
+    conf_title: "Confirm Deletion?", conf_desc: "Are you sure you want to delete this item?", btn_cancel: "Cancel", btn_confirm_del: "Delete",
+    toast_save: "Saved successfully!", toast_del: "Item deleted", toast_err: "Please fill in name and price.",
+    login_title: "Admin Login", login_placeholder: "Enter Password", btn_login: "Login", toast_wrong_pwd: "Incorrect Password!"
+  },
+  zh: {
+    welcome: "✦ 欢迎光临 ✦",
+    sub: "高级餐饮体验",
+    scan: "扫描二维码查看我们的专属菜单",
+    cat_all: "全部", cat_starter: "开胃菜", cat_main: "主菜", cat_grill: "烧烤", cat_dessert: "甜点", cat_drink: "饮品",
+    currency: "泰铢",
+    empty: "该类别暂无菜单",
+    add_cart: "添加",
+    admin_on: "管理员模式: 开启", admin_off: "管理员模式: 关闭",
+    btn_edit: "编辑", btn_del: "删除",
+    add_menu: "+ 添加新菜单",
+    footer: "© 2026 · 二维码展示专用菜单",
+    modal_add_title: "添加新菜品", modal_edit_title: "编辑菜品",
+    lbl_img: "菜品图片", lbl_hint: "点击或拖拽图片至此", lbl_price: "价格", lbl_cat: "类别",
+    btn_save: "保存",
+    conf_title: "确认删除？", conf_desc: "您确定要删除此菜单吗？", btn_cancel: "取消", btn_confirm_del: "删除",
+    toast_save: "保存成功！", toast_del: "已删除", toast_err: "请填写名称和价格。",
+    login_title: "管理员登录", login_placeholder: "输入密码", btn_login: "登录", toast_wrong_pwd: "密码错误！"
+  }
+};
+
+// ─── Initial Data ───────────────────────────────────────
 let menuItems = [
   {
-    id:1, cat:'starter',
-    nameEn:'Burrata & Heritage Tomato', nameTh:'บูร์ราต้ากับมะเขือเทศสด',
-    desc:'ครีมบูร์ราต้าสดจากอิตาลี เสิร์ฟคู่มะเขือเทศเฮอริเทจสีสันสวยงาม ราดด้วยน้ำมันมะกอก Extra Virgin',
-    price:320, tags:['veg','pop'], img:null, badge:'แนะนำ'
+    id: 1, cat: 'starter', price: 320, img: null, badge: true,
+    name: { th: 'บูร์ราต้ากับมะเขือเทศสด', en: 'Burrata & Heritage Tomato', zh: '布拉塔奶酪与传家宝番茄' },
+    desc: { th: 'ครีมบูร์ราต้าสดจากอิตาลี เสิร์ฟคู่มะเขือเทศเฮอริเทจ', en: 'Fresh Italian burrata with colorful heritage tomatoes.', zh: '新鲜意大利布拉塔奶酪搭配传家宝番茄。' }
   },
   {
-    id:2, cat:'main',
-    nameEn:'Wagyu Beef Tenderloin', nameTh:'วากิวเทนเดอร์ลอยน์',
-    desc:'เนื้อวากิวคัดพิเศษ Marble 7+ ย่างไฟอ่อนๆ เสิร์ฟพร้อม Truffle Jus และมันบดเนย',
-    price:1280, tags:['pop','new'], img:null, badge:'Signature'
+    id: 2, cat: 'main', price: 1280, img: null, badge: true,
+    name: { th: 'วากิวเทนเดอร์ลอยน์', en: 'Wagyu Beef Tenderloin', zh: '和牛牛里脊' },
+    desc: { th: 'เนื้อวากิวคัดพิเศษ Marble 7+ เสิร์ฟพร้อม Truffle Jus', en: 'Premium Wagyu Marble 7+ with Truffle Jus.', zh: '精选和牛，搭配松露汁。' }
   },
   {
-    id:3, cat:'grill',
-    nameEn:'Tiger Prawn Skewer', nameTh:'กุ้งแม่น้ำเสียบไม้',
-    desc:'กุ้งแม่น้ำตัวใหญ่หมักเครื่องเทศ ย่างบนเตาถ่าน เสิร์ฟพร้อม Chimichurri Sauce',
-    price:580, tags:['spicy','pop'], img:null, badge:null
-  },
-  {
-    id:4, cat:'dessert',
-    nameEn:'Dark Chocolate Lava', nameTh:'ลาวาช็อกโกแลตเข้ม',
-    desc:'เค้กช็อกโกแลตร้อน 72% Cacao หัวใจเป็นของเหลวเข้มข้น คู่กับไอศกรีมวานิลลา Madagascar',
-    price:240, tags:['pop'], img:null, badge:null
-  },
-  {
-    id:5, cat:'drink',
-    nameEn:'Rose & Lychee Sangria', nameTh:'ซังเกรียลิ้นจี่กุหลาบ',
-    desc:'ไวน์โรเซ่ผสมลิ้นจี่สด น้ำกุหลาบ และผลไม้ตามฤดูกาล เสิร์ฟในแก้วทรงสูง',
-    price:280, tags:['new'], img:null, badge:null
-  },
-  {
-    id:6, cat:'starter',
-    nameEn:'Foie Gras Toast', nameTh:'ฟัวกราส์บนขนมปังกรอบ',
-    desc:'ฟัวกราส์เกรด A พันช่วงบนขนมปัง Brioche ทอด ราดน้ำผึ้งดำและ Balsamic Reduction',
-    price:480, tags:['pop'], img:null, badge:'Chef\'s Pick'
-  },
+    id: 3, cat: 'drink', price: 280, img: null, badge: false,
+    name: { th: 'ซังเกรียลิ้นจี่กุหลาบ', en: 'Rose & Lychee Sangria', zh: '玫瑰荔枝桑格利亚' },
+    desc: { th: 'ไวน์โรเซ่ผสมลิ้นจี่สดและน้ำกุหลาบ', en: 'Rosé wine mixed with fresh lychee and rose water.', zh: '桃红葡萄酒混合新鲜荔枝和玫瑰水。' }
+  }
 ];
 
-let selectedTags = [];
-let modalImgData = null;
+// ─── State ──────────────────────────────────────────────
+let currentLang = 'th';
 let currentFilter = 'all';
+let currentView = 'customer';
 
-// ─── Render ─────────────────────────────────────────────
-function catLabel(cat) {
-  const m = {starter:'🥗 อาหารเรียกน้ำย่อย', main:'🍽 อาหารหลัก', grill:'🔥 จากเตาย่าง', dessert:'🍮 ของหวาน', drink:'🍷 เครื่องดื่ม'};
-  return m[cat] || cat;
+let editingId = null;
+let modalImgData = null;
+let itemToDelete = null;
+
+// ─── Localization & UI Update ───────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.innerText.toLowerCase().includes(lang) || (lang==='zh' && b.innerText==='中文'));
+  });
+  updateStaticUI();
+  renderCatNav();
+  if (currentView === 'customer') renderCustomerMenu();
+  else renderAdminTable();
 }
 
-function renderMenu() {
+function t(key) { return dict[currentLang][key]; }
+
+function updateStaticUI() {
+  document.getElementById('ui-welcome').innerText = t('welcome');
+  document.getElementById('ui-sub').innerText = t('sub');
+  document.getElementById('ui-scan').innerText = t('scan');
+  
+  // Modal texts
+  document.getElementById('lbl-img').innerText = t('lbl_img');
+  document.getElementById('lbl-upload-hint').innerText = t('lbl_hint');
+  document.getElementById('lbl-price').innerText = t('lbl_price');
+  document.getElementById('lbl-cat').innerText = t('lbl_cat');
+  document.getElementById('btnSave').innerText = t('btn_save');
+
+  // Confirm texts
+  document.getElementById('confirm-title').innerText = t('conf_title');
+  document.getElementById('confirm-desc').innerText = t('conf_desc');
+  document.getElementById('btn-cancel').innerText = t('btn_cancel');
+  document.getElementById('btn-del').innerText = t('btn_confirm_del');
+  
+  // Login Modal texts
+  document.getElementById('login-title').innerText = t('login_title');
+  document.getElementById('inp-password').placeholder = t('login_placeholder');
+  document.getElementById('btn-login-cancel').innerText = t('btn_cancel');
+  document.getElementById('btn-login-submit').innerText = t('btn_login');
+}
+
+function renderCatNav() {
+  const cats = [
+    { id: 'all', icon: '' },
+    { id: 'starter', icon: '🥗 ' },
+    { id: 'main', icon: '🍽 ' },
+    { id: 'grill', icon: '🔥 ' },
+    { id: 'dessert', icon: '🍮 ' },
+    { id: 'drink', icon: '🍷 ' }
+  ];
+  
+  const nav = document.getElementById('catNav');
+  nav.innerHTML = cats.map(c => `
+    <button class="cat-btn ${currentFilter === c.id ? 'active' : ''}" onclick="filterCat('${c.id}')">
+      ${c.icon}${t('cat_'+c.id)}
+    </button>
+  `).join('');
+}
+
+function filterCat(cat) {
+  currentFilter = cat;
+  renderCatNav();
+  renderCustomerMenu();
+}
+
+// ─── Admin Login Authentication ─────────────────────────
+function promptAdminLogin() {
+  document.getElementById('inp-password').value = '';
+  document.getElementById('loginModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('inp-password').focus(), 100);
+}
+
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.add('hidden');
+}
+
+function verifyPassword() {
+  const pwd = document.getElementById('inp-password').value;
+  if (pwd === 'P@ssw0rd88') {
+    closeLoginModal();
+    switchView('admin');
+  } else {
+    showToast(t('toast_wrong_pwd'));
+    document.getElementById('inp-password').value = '';
+    document.getElementById('inp-password').focus();
+  }
+}
+
+// Allow pressing Enter to submit password
+document.getElementById('inp-password').addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') verifyPassword();
+});
+
+// ─── View Switcher (Customer <-> Admin) ─────────────────
+function switchView(view) {
+  currentView = view;
+  if (view === 'admin') {
+    document.getElementById('customerView').style.display = 'none';
+    document.getElementById('adminView').style.display = 'block';
+    renderAdminTable();
+  } else {
+    document.getElementById('adminView').style.display = 'none';
+    document.getElementById('customerView').style.display = 'block';
+    renderCustomerMenu();
+  }
+  window.scrollTo(0, 0);
+}
+
+// ─── Rendering Customer Menu ────────────────────────────
+function renderCustomerMenu() {
   const container = document.getElementById('menuContainer');
   const filtered = currentFilter === 'all' ? menuItems : menuItems.filter(i => i.cat === currentFilter);
   
-  // Group by category
   const groups = {};
   filtered.forEach(item => {
     if (!groups[item.cat]) groups[item.cat] = [];
@@ -761,18 +951,17 @@ function renderMenu() {
   container.innerHTML = '';
 
   if (Object.keys(groups).length === 0) {
-    container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px;font-size:14px;">ยังไม่มีเมนูในหมวดนี้</p>';
+    container.innerHTML = `<p style="text-align:center;color:var(--muted);padding:40px;font-size:15px;">${t('empty')}</p>`;
     return;
   }
 
-  // Render in category order
   const order = ['starter','main','grill','dessert','drink'];
   order.forEach(cat => {
     if (!groups[cat]) return;
     const section = document.createElement('section');
     section.innerHTML = `
       <div class="section-title">
-        <h2>${catLabel(cat)}</h2>
+        <h2>${t('cat_'+cat)}</h2>
         <div class="section-title-line"></div>
       </div>
       <div class="menu-grid">${groups[cat].map(cardHTML).join('')}</div>
@@ -783,103 +972,109 @@ function renderMenu() {
 
 function cardHTML(item) {
   const imgContent = item.img
-    ? `<img src="${item.img}" alt="${item.nameEn}" loading="lazy"><div class="card-img-overlay"></div>`
-    : `<div class="card-img-placeholder" onclick="triggerUpload(${item.id})">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.7)" stroke-width="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
-          <path d="M21 15l-5-5L5 21"/>
+    ? `<img src="${item.img}" alt="" loading="lazy"><div class="card-img-overlay"></div>`
+    : `<div class="card-img-placeholder">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
         </svg>
-        <p>อัพโหลดรูปภาพ</p>
        </div>`;
 
-  const tagsHTML = item.tags.map(t => {
-    if (t==='spicy') return `<span class="tag tag-spicy">🌶 เผ็ด</span>`;
-    if (t==='veg')   return `<span class="tag tag-veg">🌿 มังสวิรัติ</span>`;
-    if (t==='pop')   return `<span class="tag tag-pop">⭐ ยอดนิยม</span>`;
-    if (t==='new')   return `<span class="tag tag-new">✨ ใหม่</span>`;
-  }).join('');
-
-  const badge = item.badge ? `<div class="card-badge">${item.badge}</div>` : '';
+  const badge = item.badge ? `<div class="card-badge">Signature</div>` : '';
+  
+  // Get language specific text, fallback to TH or EN if missing
+  const name = item.name[currentLang] || item.name['en'] || item.name['th'] || '';
+  const nameSub = currentLang === 'th' ? item.name['en'] : item.name['th']; // Show secondary language
+  const desc = item.desc[currentLang] || item.desc['en'] || '';
 
   return `
-  <div class="menu-card" id="card-${item.id}">
+  <div class="menu-card">
     <div class="card-img-wrap">
       ${imgContent}
       ${badge}
-      <label class="upload-trigger" title="เปลี่ยนรูปภาพ">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        อัพโหลด
-        <input type="file" accept="image/*" onchange="uploadCardImg(${item.id}, this)">
-      </label>
     </div>
     <div class="card-body">
-      <div class="card-name">${item.nameEn}</div>
-      <div class="card-name-th">${item.nameTh}</div>
-      ${item.tags.length ? `<div class="card-tags">${tagsHTML}</div>` : ''}
-      <div class="card-desc">${item.desc}</div>
+      <div class="card-name">${name}</div>
+      <div class="card-name-sub">${nameSub || ''}</div>
+      <div class="card-desc">${desc}</div>
       <div class="card-footer">
-        <div class="card-price">฿${item.price.toLocaleString()}<span>บาท</span></div>
-        <button class="card-add" onclick="addToOrder('${item.nameEn}')">+</button>
+        <div class="card-price">${item.price.toLocaleString()}<span>${t('currency')}</span></div>
       </div>
     </div>
   </div>`;
 }
 
-// ─── Filter ─────────────────────────────────────────────
-function filterCat(cat, btn) {
-  currentFilter = cat;
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderMenu();
+// ─── Rendering Admin Table ──────────────────────────────
+function renderAdminTable() {
+  const tbody = document.getElementById('adminTableBody');
+  tbody.innerHTML = menuItems.map(item => {
+    const img = item.img 
+      ? `<img src="${item.img}" class="admin-thumb" alt="">` 
+      : `<div class="admin-thumb-placeholder">No Img</div>`;
+    const nameTh = item.name.th || '-';
+    const nameEn = item.name.en || '-';
+    return `
+      <tr>
+        <td>${img}</td>
+        <td>
+          <strong style="color:#fff;">${nameTh}</strong><br>
+          <span style="color:var(--muted); font-size:12px;">${nameEn}</span>
+        </td>
+        <td>${t('cat_'+item.cat) || item.cat}</td>
+        <td>${item.price.toLocaleString()}</td>
+        <td>
+          <div class="admin-actions-cell">
+            <button class="admin-btn edit" onclick="openModal(${item.id})">${t('btn_edit')}</button>
+            <button class="admin-btn delete" onclick="confirmDelete(${item.id})">${t('btn_del')}</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
-// ─── Upload ─────────────────────────────────────────────
-function triggerUpload(id) {
-  const card = document.getElementById('card-'+id);
-  if (!card) return;
-  const inp = card.querySelector('.upload-trigger input');
-  if (inp) inp.click();
-}
-
-function uploadCardImg(id, input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const idx = menuItems.findIndex(m => m.id === id);
-    if (idx > -1) {
-      menuItems[idx].img = e.target.result;
-      renderMenu();
-      showToast('✓ อัพโหลดรูปภาพสำเร็จ');
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-// ─── Modal ──────────────────────────────────────────────
-function openModal() {
+// ─── Modal Operations (Add/Edit) ────────────────────────
+function openModal(id = null) {
+  editingId = id;
+  document.getElementById('modalTitle').innerText = id ? t('modal_edit_title') : t('modal_add_title');
   document.getElementById('modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
+
+  if (id) {
+    const item = menuItems.find(i => i.id === id);
+    if(item) {
+      document.getElementById('inp-price').value = item.price;
+      document.getElementById('inp-cat').value = item.cat;
+      
+      document.getElementById('inp-name-th').value = item.name.th || '';
+      document.getElementById('inp-name-en').value = item.name.en || '';
+      document.getElementById('inp-name-zh').value = item.name.zh || '';
+      
+      document.getElementById('inp-desc-th').value = item.desc.th || '';
+      document.getElementById('inp-desc-en').value = item.desc.en || '';
+      document.getElementById('inp-desc-zh').value = item.desc.zh || '';
+
+      if (item.img) {
+        document.getElementById('modalPreview').src = item.img;
+        document.getElementById('modalPreview').style.display = 'block';
+        modalImgData = item.img;
+      }
+    }
+  } else {
+    resetModalInputs();
+  }
 }
+
 function closeModal() {
   document.getElementById('modal').classList.add('hidden');
   document.body.style.overflow = '';
-  resetModal();
 }
-function resetModal() {
-  ['inp-name-en','inp-name-th','inp-desc','inp-price'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+
+function resetModalInputs() {
+  ['inp-price','inp-name-th','inp-name-en','inp-name-zh','inp-desc-th','inp-desc-en','inp-desc-zh'].forEach(id => {
+    document.getElementById(id).value = '';
   });
   document.getElementById('inp-cat').value = 'starter';
   document.getElementById('modalPreview').style.display = 'none';
-  document.querySelectorAll('.tag-toggle').forEach(t => {
-    t.className = 'tag-toggle';
-  });
-  selectedTags = [];
   modalImgData = null;
 }
 
@@ -896,66 +1091,83 @@ function previewModalImg(input) {
   reader.readAsDataURL(file);
 }
 
-function toggleTag(btn) {
-  const tag = btn.dataset.tag;
-  const activeClass = `active-${tag}`;
-  if (btn.classList.contains(activeClass)) {
-    btn.classList.remove(activeClass);
-    selectedTags = selectedTags.filter(t => t !== tag);
-  } else {
-    btn.classList.add(activeClass);
-    selectedTags.push(tag);
-  }
-}
-
 function saveItem() {
-  const nameEn = document.getElementById('inp-name-en').value.trim();
+  const price = parseFloat(document.getElementById('inp-price').value);
+  const cat = document.getElementById('inp-cat').value;
+  
   const nameTh = document.getElementById('inp-name-th').value.trim();
-  const desc   = document.getElementById('inp-desc').value.trim();
-  const price  = parseFloat(document.getElementById('inp-price').value);
-  const cat    = document.getElementById('inp-cat').value;
-
-  if (!nameEn || !nameTh || isNaN(price) || price <= 0) {
-    showToast('⚠️ กรุณากรอกข้อมูลให้ครบถ้วน');
+  const nameEn = document.getElementById('inp-name-en').value.trim();
+  
+  if (!nameTh && !nameEn || isNaN(price)) {
+    showToast(t('toast_err'));
     return;
   }
 
-  const newItem = {
-    id: Date.now(),
-    cat, nameEn, nameTh, desc,
-    price, tags: [...selectedTags],
-    img: modalImgData,
-    badge: null
+  const newItemData = {
+    cat, price, img: modalImgData, badge: false,
+    name: {
+      th: nameTh,
+      en: nameEn,
+      zh: document.getElementById('inp-name-zh').value.trim()
+    },
+    desc: {
+      th: document.getElementById('inp-desc-th').value.trim(),
+      en: document.getElementById('inp-desc-en').value.trim(),
+      zh: document.getElementById('inp-desc-zh').value.trim()
+    }
   };
 
-  menuItems.push(newItem);
+  if (editingId) {
+    const idx = menuItems.findIndex(i => i.id === editingId);
+    if(idx > -1) {
+      menuItems[idx] = { ...menuItems[idx], ...newItemData };
+    }
+  } else {
+    newItemData.id = Date.now();
+    menuItems.push(newItemData);
+  }
+
   closeModal();
-  currentFilter = 'all';
-  document.querySelectorAll('.cat-btn').forEach((b,i) => b.classList.toggle('active', i===0));
-  renderMenu();
-  showToast('✓ เพิ่มเมนูสำเร็จ!');
+  if (currentView === 'admin') renderAdminTable();
+  else renderCustomerMenu();
+  showToast(t('toast_save'));
 }
 
-// ─── Toast ──────────────────────────────────────────────
+// ─── Delete Operations ──────────────────────────────────
+function confirmDelete(id) {
+  itemToDelete = id;
+  document.getElementById('confirmModal').classList.remove('hidden');
+}
+function closeConfirm() {
+  itemToDelete = null;
+  document.getElementById('confirmModal').classList.add('hidden');
+}
+function executeDelete() {
+  if(itemToDelete) {
+    menuItems = menuItems.filter(i => i.id !== itemToDelete);
+    if (currentView === 'admin') renderAdminTable();
+    else renderCustomerMenu();
+    showToast(t('toast_del'));
+  }
+  closeConfirm();
+}
+
+// ─── Utils ──────────────────────────────────────────────
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  t.innerText = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ─── Order ──────────────────────────────────────────────
-function addToOrder(name) {
-  showToast(`🛒 เพิ่ม "${name}" แล้ว`);
-}
+// Close modals on background click
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.getElementById('confirmModal').addEventListener('click', function(e) { if (e.target === this) closeConfirm(); });
+document.getElementById('loginModal').addEventListener('click', function(e) { if (e.target === this) closeLoginModal(); });
 
-// ─── Close modal on backdrop ────────────────────────────
-document.getElementById('modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+// ─── Init ───────────────────────────────────────────────
+setLang('th'); // Initialize with Thai
 
-// ─── Init ────────────────────────────────────────────────
-renderMenu();
 </script>
 </body>
 </html>
